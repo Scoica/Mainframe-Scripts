@@ -1,0 +1,5 @@
+//STEP0010 EXEC PGM=IEBDG
+//* Add random data into file\
+//* the data follows a template we code
+
+
