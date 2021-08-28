@@ -1,0 +1,11 @@
+//STEP0010 EXEC PGM=IEBDG
+//* Output files in IEBDG must have their DCB parameters explictly set 
+//*  otherwise we risk a S013 abend (to check)
+//
+//
+//
+//
+//
+//
+
+
