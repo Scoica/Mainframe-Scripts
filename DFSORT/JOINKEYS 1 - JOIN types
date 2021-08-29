@@ -1,0 +1,58 @@
+//STEP0010 EXEC PGM=SORT             
+//SYSPRINT DD   SYSOUT=*             
+//SYSOUT   DD   SYSOUT=*             
+//SORTJNF1 DD   *                    
+AAA - F1                             
+BBB - F1                             
+CCC - F1                             
+DDD - F1                             
+FFF - F1                             
+/*                                   
+//SORTJNF2 DD   *                    
+AAA - F2                             
+CCC - F2                             
+EEE - F2                             
+FFF - F2                             
+/*                                   
+//SORTOUT  DD   DSN=&SYSUID.STEP0010.SORTOUT,
+//SYSIN    DD  *                     
+  SORT FIELDS=COPY                   
+  JOINKEYS FILES=F1,FIELDS=(01,03,A) 
+  JOINKEYS FILES=F2,FIELDS=(01,03,A) 
+* When we don't specify the JOIN UNPAIRED command then we pair only the matching keys
+* These are the same as with the SQL JOINs LEFT and OUTER
+* JOIN UNPAIRED,F1
+* JOIN UNPAIRED,F2
+* JOIN UNPAIRED,F1,F2
+  REFORMAT FIELDS=(F1:01,09,F2:01,08)
+/*                                   
+
+Output 1: only paired
+
+AAA - F1 AAA - F2
+CCC - F1 CCC - F2
+FFF - F1 FFF - F2
+
+Output 2: JOIN UNPAIRED,F1
+
+AAA - F1 AAA - F2
+BBB - F1         
+CCC - F1 CCC - F2
+DDD - F1         
+FFF - F1 FFF - F2
+
+Output 3: JOIN UNPAIRED,F2
+
+AAA - F1 AAA - F2
+CCC - F1 CCC - F2
+         EEE - F2
+FFF - F1 FFF - F2
+
+Output 4: JOIN UNPAIRED,F1,F2
+
+AAA - F1 AAA - F2
+BBB - F1         
+CCC - F1 CCC - F2
+DDD - F1         
+         EEE - F2
+FFF - F1 FFF - F2
