@@ -1,11 +1,15 @@
+//* This scripts outputs a file with values from 1 to 60,000
 //STEP0010 EXEC PGM=IEBDG
-//* Output files in IEBDG must have their DCB parameters explictly set 
+//SYSPRINT DD SYSOUT=*
+//*
+//OUT    DD DSN=&SYSUID.OUT,
+//       DISP=(NEW,CATLG,DELETE),SPACE=(TRK,(100,100),RLSE),
+//* Output files in IEBDG must have their DCB parameters explictly set
 //*  otherwise we risk a S013 abend (to check)
-//
-//
-//
-//
-//
-//
-
-
+//       DCB=(RECFM=FB,LRECL=5,BLKSIZE=0)
+//SYSIN  DD *
+  DSD OUTPUT=(OUT)
+  FD NAME=FIELD1,LENGTH=5,FORMAT=ZD,ACTION=FX,INDEX=1,CYCLE=1
+  CREATE QUANTITY=60000,NAME=(FIELD1)
+  END
+/*
