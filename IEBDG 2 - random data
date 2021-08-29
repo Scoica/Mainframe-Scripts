@@ -1,5 +1,16 @@
-//STEP0010 EXEC PGM=IEBDG
-//* Add random data into file\
-//* the data follows a template we code
-
-
+//STEP0010 EXEC PGM=IEBDG,COND=(0,NE)
+//* Add random data into file, the data follows a template
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  DATA,DLM=#$
+  DSD OUTPUT=(RECRRN),INPUT=(RECIN)
+  FD NAME=FIELD1,LENGTH=5,STARTLOC=1,FORMAT=RA
+  FD NAME=FIELD2,LENGTH=5,STARTLOC=6,INPUT=RECIN
+  CREATE INPUT=RECIN,NAME=(FIELD1,FIELD2)
+  END
+#$
+//* I prefer to use the file from IEBDG 1 to have more lines with random data
+//RECIN    DD  DSN=&SYSUID.RECIN,
+//         DISP=(SHR,PASS)
+//RECRRN   DD  DSN=&SYSUID.RECRRN,
+//         DISP=(NEW,CATLG,DELETE),SPACE=(TRK,(200,100),RLSE),
+//         DCB=(LRECL=10,RECFM=FB,BLKSIZE=0)
